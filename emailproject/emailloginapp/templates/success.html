@@ -1,0 +1,31 @@
+{% extends "navbar.html"  %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/success.css' %}">
+    <title>Success</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>WELCOME</h1>
+        </header>
+        <main>
+            <section class="user-profile">
+                <img src="{{ request.user.image.url }}" alt="User Image" class="profile-image">
+                <h2>{{ request.user.username }}</h2>
+                <p>Firstname: {{ request.user.first_name }}</p>
+                <p>Lastname: {{ request.user.last_name }}</p>
+                <p>Nickname: {{ request.user.nickname }}</p>
+                <p>Address: {{ request.user.address }}</p>
+                <p>Phone Number: {{ request.user.phone_number }}</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
+{% endblock %}

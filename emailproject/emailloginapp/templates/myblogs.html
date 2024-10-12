@@ -1,0 +1,31 @@
+{% extends "navbar.html"  %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/myblogs.css' %}">
+    <title>Blog List</title>
+</head>
+<body>
+{% if posts %}
+{% for posts in posts %}
+    <div class="blog-container">
+        <h2 class="blog-title">{{posts.title}}</h2>
+        <p class="blog-content">{{posts.content}}</p>
+        <div class="button-container">
+            <a class="delete-button" href="deleteblog/{{posts.id}}" class="delete-link">Delete</a>
+             <a class="delete-button" href="editblog/{{posts.id}}" class="delete-link">Edit</a>
+        </div>
+    </div>
+{% endfor %}
+{%else%}
+<p class="blog-content">You have not posted a blog....</p>
+{% endif %}
+</body>
+</html>
+{% endblock %}
+
+

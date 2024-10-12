@@ -1,0 +1,43 @@
+{% extends "navbar.html"  %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    <title>ADMIN PANEL</title>
+</head>
+<body>
+<h1>ADMIN PANEL</h1>
+<div>
+    <table>
+        <tr>
+            <th>NAME</th>
+             <th>USERNAME</th>
+            <th>ADDRESS</th>
+            <th>PHONENUMBER</th>
+            <th>EMAIL</th>
+            <th>IMAGE</th>
+            <th>NO:POSTS</th>
+            <th>DELETE USER</th>
+        </tr>
+        {% for details in details %}
+        {% if not details.is_admin and not details.is_staff %}
+        <tr>
+            <td>{{details.first_name}} {{details.last_name }}</td>
+            <td>{{details.username}}</td>
+            <td>{{details.address}}</td>
+            <td>{{details.phone_number}}</td>
+            <td>{{details.email}}</td>
+            <td><img src="{{ details.image.url }}" alt="User Image" class="profile-image"></td>
+            <td>{{details.num_blogs}}</td>
+            <td><a href="delete_user/{{details.id}}"><button>DELETE</button></a></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>
+{% endblock %}

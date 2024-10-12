@@ -1,0 +1,26 @@
+{% load static %}
+<html>
+<head>
+  <title>My bloggzz</title>
+<link rel="stylesheet" href="{% static 'css/delete.css' %}">
+</head>
+<body>
+<div class="modal delete-modal">
+<div class="modal-content">
+<h2>Delete Blog?</h2>
+  {% if blog.title %}
+<p>Are you sure you want to delete "{{ blog.title }}"?</p>
+  {% else %}
+  <p>Are you sure you want to delete "{{ blog.name }}"?</p>
+  {% endif %}
+<form method="post">
+{% csrf_token %}
+<div class="button-group">
+<button type="submit" class="btn btn-danger">Delete</button>
+<button type="button" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+</div>
+</form>
+</div>
+</div>
+</body>
+</html>

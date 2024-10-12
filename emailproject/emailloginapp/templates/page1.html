@@ -1,0 +1,53 @@
+{% extends "navbar.html"  %}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/page1.css' %}">
+    <title>My Blogzzz</title>
+</head>
+<body>
+    <div class="home-container">
+        <header>
+            <h1>MY BLOGZZZ</h1>
+            {% if not user.is_authenticated %}
+            <p>Welcome to my blog!</p>
+            {% else %}
+            <p>All Blogs...</p>
+            <div class="search-bar">
+    <form method="get" action="{% url 'search' %}">
+<!--        {% csrf_token %}-->
+        <input type="text" name="search"  placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+    </div>
+            {% endif %}
+        </header>
+        {% if not user.is_authenticated %}
+        <nav>
+            <a href="{% url 'login' %}" class="btn-login">Login</a>
+            <a href="{% url 'signup' %}" class="btn-signup">Signup</a>
+        </nav>
+    </div>
+    {% else %}
+{% for posts in posts %}
+    <div class="blog-container">
+        <img src="{{ posts.author.image.url }}" alt="User Image" class="profile-image">
+        <h2 class="blog-title">{{posts.title}}</h2>
+        <p class="blog-content">{{posts.content}}</p>
+         <small class="blog-content">{{posts.author.first_name}}</small><br>
+        <a href="like/{{posts.id}}">
+            {% if posts|has_liked:request.user %}
+            <img src="{% static 'icons/endorsement-icon.svg'%}" alt="User Image" class="like"></a> {% else %}
+        <img src="{% static 'icons/thumbs-up-line-icon.svg'%}" alt="User Image" class="like"></a>{% endif %} <p>{{posts.like_count}}</p>
+    </div>
+{% endfor %}
+ {% endif %}
+
+</body>
+</html>
+{% endblock %}
