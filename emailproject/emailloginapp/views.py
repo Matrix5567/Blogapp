@@ -129,7 +129,10 @@ def liked(request,id):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-    return  HttpResponseRedirect(request.session.get('previous_url'))
+    if 'members' in request.build_absolute_uri():
+        return redirect('members')
+    else:
+        return  HttpResponseRedirect(request.session.get('previous_url'))
 
 
 @login_required()

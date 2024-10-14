@@ -11,7 +11,7 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=255)
     nickname = models.CharField(max_length=255,null=True)
     address = models.CharField(max_length=255)
-    phone_number = models.IntegerField(null=True)
+    phone_number = models.IntegerField(null=True,unique=True)
     image = models.ImageField(upload_to='images/',null=True)
     is_admin = models.BooleanField(default=False,null=True)
     USERNAME_FIELD = 'email'
