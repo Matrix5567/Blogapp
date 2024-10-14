@@ -85,7 +85,7 @@ form button[type="submit"]:hover {
 
 /* Responsive Styles */
 
-@media (max-width: 768px) {
+/*@media (max-width: 768px) {
   .container {
     margin: 20px auto;
     padding: 10px;
@@ -110,3 +110,5 @@ form button[type="submit"]:hover {
     padding: 5px;
   }
 }
+
+

@@ -1,0 +1,9 @@
+simple blog app using django where users can register and post blogs , like/dislike blogs . There is an admin panel
+run the seeder file to create admin the admin can view all the users their number of posts etc tha admin can delete
+the registered users there is also a custom decorator for admin so that normal users cant access admin url.
+
+soon to be implemented:
+1 . google log in
+2 . new styles
+3 . public/private profiles
+4 . profile reporting
