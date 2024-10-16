@@ -5,10 +5,3 @@ is also a maintenence mode middleware which is set to false in settings.py if ch
 maintenence . There is also a automatic logout middleware which will logout users if inactive for a certain period.Users
 can also edit thier details including changing their email and password.
 
-soon to be implemented:
-1 . google log in
-2 . new styles
-3 . public/private profiles
-4 . profile reporting
-5 . profile locking by admin
-6 . comment section
