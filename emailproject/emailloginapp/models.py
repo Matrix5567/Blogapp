@@ -14,6 +14,7 @@ class CustomUser(AbstractUser):
     phone_number = models.IntegerField(null=True,unique=True)
     image = models.ImageField(upload_to='images/',null=True)
     is_admin = models.BooleanField(default=False,null=True)
+    is_locked = models.BooleanField(default=False,null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username',)
     def __str__(self):

@@ -17,5 +17,6 @@ urlpatterns = [
     path('profile/', views.profile_edit, name='profile_edit'),
     path('ad/', views.ad_min, name='ad_min'),
     path('ad/delete_user/<int:id>', views.del_user, name='del_user'),
+    path('lock/<int:id>/',views.lock_user,name='lock_user'),
 ]
 

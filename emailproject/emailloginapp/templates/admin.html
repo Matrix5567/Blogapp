@@ -5,9 +5,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">>
     <title>ADMIN PANEL</title>
 </head>
+<script>
+function lock(id) {
+document.getElementById(id);
+$.get("http://127.0.0.1:8000/lock/"+id+"/", function(data, status)
+   {
+   alert(data)
+
+   });
+   }
+</script>
 <body>
 <h1>ADMIN PANEL</h1>
 <div>
@@ -21,6 +31,7 @@
             <th>IMAGE</th>
             <th>NO:POSTS</th>
             <th>DELETE USER</th>
+            <th>LOCK USER</th>
         </tr>
         {% for details in details %}
         {% if not details.is_admin and not details.is_staff %}
@@ -33,6 +44,11 @@
             <td><img src="{{ details.image.url }}" alt="User Image" class="profile-image"></td>
             <td>{{details.num_blogs}}</td>
             <td><a href="delete_user/{{details.id}}"><button>DELETE</button></a></td>
+            <td> <label class="switch">
+ <input type="checkbox"
+ id="{{details.id}}" onchange="lock(this.id)" {% if details.is_locked %} checked {%endif%}>
+ <span class="slider round"></span>
+ </label></td>
         </tr>
         {% endif %}
         {% endfor %}

@@ -1,5 +1,5 @@
 from django.db.models import Count
-from django.http import  HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render , redirect
 from django.contrib.auth import authenticate , login , logout
 from . forms import SignupForm , LoginForm ,UserEditForm
@@ -52,10 +52,14 @@ def user_login(request):
                     request.session.save()
                     return redirect('ad_min')
                 else:
-                    login(request, user)
-                    request.session['user'] = email
-                    request.session.save()
-                    return redirect('success')
+                    locked = CustomUser.objects.get(email=email)
+                    if locked.is_locked:
+                        messages.error(request, 'THIS ACCOUNT IS LOCKED BY ADMIN...')
+                    else:
+                        login(request, user)
+                        request.session['user'] = email
+                        request.session.save()
+                        return redirect('success')
             else:
                 messages.error(request, 'INVALID LOGIN CREDENTIALS')
 
@@ -162,6 +166,18 @@ def del_user(request,id):
         return redirect('ad_min')
     name = user.first_name + user.last_name
     return render(request, 'deleteblog.html', {'blog': name})
+
+@role_required()
+def lock_user(request,id):
+    user = CustomUser.objects.get(id=id)
+    if user.is_locked:
+        user.is_locked = False
+        user.save()
+        return HttpResponse('User UnLocked')
+    else:
+        user.is_locked = True
+        user.save()
+        return HttpResponse('User Locked')
 
 
 
