@@ -1,5 +1,5 @@
 from django.db.models import Count
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse , JsonResponse
 from django.shortcuts import render , redirect
 from django.contrib.auth import authenticate , login , logout
 from . forms import SignupForm , LoginForm ,UserEditForm
@@ -126,17 +126,17 @@ def search(request):
     return render(request, 'page1.html', {'posts': results})
 
 
-@login_required()
-def liked(request,id):
-    post = Blog.objects.get(id=id)
-    if post.has_user_liked(request.user):
-        post.likes.remove(request.user)
-    else:
-        post.likes.add(request.user)
-    if 'members' in request.build_absolute_uri():
-        return redirect('members')
-    else:
-        return  HttpResponseRedirect(request.session.get('previous_url'))
+# @login_required()
+# def liked(request,id):
+#     post = Blog.objects.get(id=id)
+#     if post.has_user_liked(request.user):
+#         post.likes.remove(request.user)
+#     else:
+#         post.likes.add(request.user)
+#     if 'members' in request.build_absolute_uri():
+#         return redirect('members')
+#     else:
+#         return  HttpResponseRedirect(request.session.get('previous_url'))
 
 
 @login_required()
@@ -179,6 +179,16 @@ def lock_user(request,id):
         user.save()
         return HttpResponse('User Locked')
 
+
+@login_required()
+def test(request,id):
+    post = Blog.objects.get(id=id)
+    if post.has_user_liked(request.user):
+        post.likes.remove(request.user)
+        return HttpResponse(post.likes.count())
+    else:
+        post.likes.add(request.user)
+        return HttpResponse(post.likes.count())
 
 
 
