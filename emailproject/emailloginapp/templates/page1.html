@@ -52,14 +52,15 @@ $.get("http://127.0.0.1:8000/test/"+id+"/", function(data, status)
         <h2 class="blog-title">{{posts.title}}</h2>
         <p class="blog-content">{{posts.content}}</p>
          <small class="blog-content">{{posts.author.first_name}}</small><br>
-<!--        <a href="like/{{posts.id}}">-->
-<!--            {% if posts|has_liked:request.user %}-->
-            <img id="{{posts.id}}" onclick="checklike(this.id)"  src="{% static 'icons/endorsement-icon.svg'%}" alt="User Image" class="like">
-<!--        </a>-->
-<!--        {% else %}-->
-        <img id="{{posts.id}}" onclick="checklike(this.id)"  src="{% static 'icons/thumbs-up-line-icon.svg'%}" alt="User Image" class="like">
-<!--        </a>-->
-<!--        {% endif %}-->
+
+        <button id="{{posts.id}}" onclick="checklike(this.id)">
+            <img src="{% static 'icons/endorsement-icon.svg'%}" alt="User Image" class="like">
+            </button>
+
+<!--        <button id="{{posts.id}}" onclick="checklike(this.id)">-->
+<!--        <img src="{% static 'icons/thumbs-up-line-icon.svg'%}" alt="User Image" class="like">-->
+<!--            </button>-->
+
         <p id="count-{{posts.id}}">{{posts.like_count}}</p>
     </div>
 {% endfor %}

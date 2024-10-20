@@ -126,19 +126,6 @@ def search(request):
     return render(request, 'page1.html', {'posts': results})
 
 
-# @login_required()
-# def liked(request,id):
-#     post = Blog.objects.get(id=id)
-#     if post.has_user_liked(request.user):
-#         post.likes.remove(request.user)
-#     else:
-#         post.likes.add(request.user)
-#     if 'members' in request.build_absolute_uri():
-#         return redirect('members')
-#     else:
-#         return  HttpResponseRedirect(request.session.get('previous_url'))
-
-
 @login_required()
 def profile_edit(request):
     if request.method == 'POST':
@@ -181,7 +168,7 @@ def lock_user(request,id):
 
 
 @login_required()
-def test(request,id):
+def test(request,id):                      # like/dislike
     post = Blog.objects.get(id=id)
     if post.has_user_liked(request.user):
         post.likes.remove(request.user)
