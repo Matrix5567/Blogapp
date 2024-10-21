@@ -15,8 +15,7 @@ function checklike(id) {
 document.getElementById(id);
 $.get("http://127.0.0.1:8000/test/"+id+"/", function(data, status)
    {
-   console.log("received",data)
-    document.getElementById("count-"+id).innerHTML = data
+    document.getElementById("count-"+id).innerHTML = data.count;
    });
    }
 </script>

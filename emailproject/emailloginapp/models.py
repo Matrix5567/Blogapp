@@ -36,8 +36,10 @@ class Blog(models.Model):
         return user in self.likes.all()
 
 
-
-
+class Likebuttonstatus(models.Model):
+    person = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='button_staus')
+    post = models.ForeignKey(Blog,on_delete=models.CASCADE)
+    is_liked = models.BooleanField(default=False)
 
 
 
