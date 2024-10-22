@@ -21,6 +21,7 @@ class CustomUser(AbstractUser):
         return self.email
 
 
+
 class Blog(models.Model):
     author = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='blogs')
     title = models.CharField(max_length=255)
@@ -36,13 +37,10 @@ class Blog(models.Model):
         return user in self.likes.all()
 
 
-class Likebuttonstatus(models.Model):
-    person = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='button_staus')
-    post = models.ForeignKey(Blog,on_delete=models.CASCADE)
-    is_liked = models.BooleanField(default=False)
-
-
-
+class LikeButtonStatus(models.Model):
+    person = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog,on_delete=models.CASCADE)
+    status = models.BooleanField(default=False,null = True)
 
 
 

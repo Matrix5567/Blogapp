@@ -6,7 +6,7 @@ from . forms import SignupForm , LoginForm ,UserEditForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .validators import validate_blog
-from.models import Blog , CustomUser , Likebuttonstatus
+from.models import Blog , CustomUser , LikeButtonStatus
 from django.contrib.sessions.models import Session
 from django.db.models import Q
 from .customdecorators import role_required
@@ -16,7 +16,11 @@ from .customdecorators import role_required
 # Create your views here.
 @login_required()
 def members(request):
-    blogs = Blog.objects.select_related().annotate(like_count=Count('likes'))
+    blogs = Blog.objects.annotate(like_count=Count('likes'))
+    for blog in blogs:
+        like_status = LikeButtonStatus.objects.filter(person=request.user,blog=blog)
+        for status in like_status:
+            blog.is_liked = status.status
     return  render(request,'page1.html',{'posts':blogs})
 
 
@@ -172,14 +176,14 @@ def test(request,id):                      # like/dislike
     post = Blog.objects.get(id=id)
     if post.has_user_liked(request.user):
         post.likes.remove(request.user)
-        like_button = Likebuttonstatus(person=request.user, post=post, is_liked=False)
-        like_button.save()
-        return JsonResponse({'count': post.likes.count(),'status':like_button.is_liked})
+        likebutton = LikeButtonStatus(person=request.user,blog=post,status=False)
+        likebutton.save()
+        return JsonResponse({'count': post.likes.count(),'status':likebutton.status})
     else:
         post.likes.add(request.user)
-        like_button = Likebuttonstatus(person=request.user,post=post,is_liked=True)
-        like_button.save()
-        return JsonResponse({'count': post.likes.count(),'status':like_button.is_liked})
+        likebutton = LikeButtonStatus(person=request.user, blog=post, status=True)
+        likebutton.save()
+        return JsonResponse({'count': post.likes.count(),'status':likebutton.status})
 
 
 
