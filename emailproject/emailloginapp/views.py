@@ -14,24 +14,34 @@ from .customdecorators import role_required
 
 
 # Create your views here.
-@login_required()
+@login_required()      # all blog listing and search blogs
 def members(request):
-    blogs = Blog.objects.annotate(like_count=Count('likes'))
-    for blog in blogs:
-        like_status = LikeButtonStatus.objects.filter(person=request.user,blog=blog)
-        for status in like_status:
-            blog.is_liked = status.status
-    return  render(request,'page1.html',{'posts':blogs})
+    search = request.GET.get('search')
+    if not search:
+        blogs = Blog.objects.annotate(like_count=Count('likes'))
+        for blog in blogs:
+            like_status = LikeButtonStatus.objects.filter(person=request.user,blog=blog)
+            for status in like_status:
+                blog.is_liked = status.status
+        return  render(request,'page1.html',{'posts':blogs})
+    else:
+        request.session['previous_url'] = request.build_absolute_uri()
+        results = Blog.objects.filter(Q(title__icontains=search)| Q(content__icontains=search) |
+                                             Q(author__first_name__icontains=search))
+        for result in results:
+            like_status = LikeButtonStatus.objects.filter(person=request.user, blog=result)
+            for status in like_status:
+                result.is_liked = status.status
+        return render(request, 'page1.html', {'posts': results})
+
 
 
 @login_required()
-def user_success(request):
+def user_success(request):  # user dashboard
     return  render(request,'success.html')
 
 
-
-# signup page
-def user_signup(request):
+def user_signup(request): #user signup
     if request.method == 'POST':
         form = SignupForm(request.POST,request.FILES)
         if form.is_valid():
@@ -80,7 +90,7 @@ def user_logout(request):
 
 
 @login_required()
-def create_blog(request):
+def create_blog(request):  # blog creation
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
@@ -93,14 +103,14 @@ def create_blog(request):
     return render(request, 'create.html')
 
 @login_required()
-def my_blog(request):
+def my_blog(request):  # blog by userid
     posts = Blog.objects.filter(author=request.user)
     return render(request, 'myblogs.html',{'posts':posts})
 
 
 
 @login_required
-def delete_blog(request,id):
+def delete_blog(request,id):  # delete blog
     try:
         blog = Blog.objects.get(id=id)
         if request.method == 'POST':
@@ -112,7 +122,7 @@ def delete_blog(request,id):
         return redirect('my')
 
 @login_required()
-def edit_blog(request,id):
+def edit_blog(request,id):  # edit blog
     posts = Blog.objects.get(id=id)
     if request.method == 'POST':
         posts.title = request.POST.get('title')
@@ -121,16 +131,8 @@ def edit_blog(request,id):
         return redirect('my')
     return render(request, 'edit.html', {'posts': posts})
 
-@login_required()
-def search(request):
-    search = request.GET.get('search')
-    request.session['previous_url'] = request.build_absolute_uri()
-    results = Blog.objects.filter(Q(title__icontains=search)| Q(content__icontains=search) |
-                                      Q(author__first_name__icontains=search))
-    return render(request, 'page1.html', {'posts': results})
 
-
-@login_required()
+@login_required()  # edit userprofile
 def profile_edit(request):
     if request.method == 'POST':
         form = UserEditForm(request.POST, request.FILES, instance=request.user)
@@ -142,7 +144,7 @@ def profile_edit(request):
     return render(request, 'edit_profile.html', {'form': form})
 
 @role_required()
-def ad_min(request):
+def ad_min(request):  # admin dashboard
     authors_blogs = CustomUser.objects.select_related().\
         annotate(num_blogs=Count('blogs')).order_by(
         'num_blogs')
@@ -150,7 +152,7 @@ def ad_min(request):
 
 
 @role_required()
-def del_user(request,id):
+def del_user(request,id):  # user deletion by admin
     user = CustomUser.objects.get(id=id)
     if request.method == 'POST':
         user.delete()
@@ -159,7 +161,7 @@ def del_user(request,id):
     return render(request, 'deleteblog.html', {'blog': name})
 
 @role_required()
-def lock_user(request,id):
+def lock_user(request,id):     # user locking by admin
     user = CustomUser.objects.get(id=id)
     if user.is_locked:
         user.is_locked = False

@@ -11,7 +11,6 @@ urlpatterns = [
     path('myblog/deleteblog/<int:id>' , views.delete_blog , name='delete'),
     path('myblog/editblog/<int:id>' , views.edit_blog , name='edit'),
     path('members/', views.members, name='members'),
-    path('search/' , views.search , name='search'),
     path('profile/', views.profile_edit, name='profile_edit'),
     path('ad/', views.ad_min, name='ad_min'),
     path('ad/delete_user/<int:id>', views.del_user, name='del_user'),
