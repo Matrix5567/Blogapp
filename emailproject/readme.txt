@@ -12,9 +12,7 @@ ADMIN PANEL
 
 Run the seeder(seeder.py) file to create admin the admin can view all the users their number of posts etc tha admin can delete
 the registered users there is also a custom decorator for admin so that normal users cant access admin url. The admin
-can lock and unlock normal users (done by ajax).
-
-***soon to be implemented - Permissions
+can lock and unlock normal users (done by ajax). Admin can set permissions for registered users
 
 
 **how to run

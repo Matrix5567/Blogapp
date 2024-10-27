@@ -16,8 +16,16 @@
         <h2 class="blog-title">{{posts.title}}</h2>
         <p class="blog-content">{{posts.content}}</p>
         <div class="button-container">
+                {% for permission in permission %}
+    {% if 'detele_blog' in permission.permissions.permissionnames  %}
             <a class="delete-button" href="deleteblog/{{posts.id}}" class="delete-link">Delete</a>
+            {%endif%}
+{% endfor %}
+             {% for permission in permission %}
+    {% if 'edit_blog' in permission.permissions.permissionnames  %}
              <a class="delete-button" href="editblog/{{posts.id}}" class="delete-link">Edit</a>
+                        {%endif%}
+{% endfor %}
         </div>
     </div>
 {% endfor %}

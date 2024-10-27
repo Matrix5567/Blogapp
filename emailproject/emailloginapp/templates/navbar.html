@@ -9,10 +9,26 @@
 {% if not request.user.is_admin %}
 <ul>
 <li><a class="active" href="{% url 'success' %}">Home</a></li>
+    {% for permission in permission %}
+    {% if 'create_blog' in permission.permissions.permissionnames  %}
 <li><a href="{% url 'create' %}">Create Blog</a> </li>
-<li><a href="{% url 'my' %}">My Blogs</a> </li>
+    {%endif%}
+{% endfor %}
+    {% for permission in permission %}
+    {% if 'see_my_blogs' in permission.permissions.permissionnames  %}
+    <li><a href="{% url 'my' %}">My Blogs</a> </li>
+     {%endif%}
+{% endfor %}
+     {% for permission in permission %}
+    {% if 'see_all_blogs' in permission.permissions.permissionnames  %}
 <li> <a href="{% url 'members' %}">All Blogs</a></li>
+     {%endif%}
+{% endfor %}
+    {% for permission in permission %}
+    {% if 'edit_user_profile' in permission.permissions.permissionnames  %}
     <li> <a href="{% url 'profile_edit' %}">Edit Profile</a></li>
+         {%endif%}
+{% endfor %}
 <li><a href="{% url 'logout' %}">Logout</a></li>
 </ul>
 {%else%}

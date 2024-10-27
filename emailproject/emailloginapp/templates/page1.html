@@ -54,11 +54,11 @@ $.get("http://127.0.0.1:8000/test/"+id+"/", function(data, status)
 {% for posts in posts %}
     <div class="blog-container" id="blog_{{posts.id}}">
         <div class="image-container">
-            <img src="{{ posts.author.image.url }}" alt="User Image" class="profile-image">
+            <img src="{{ posts.author.image.url }}" alt="User Image" class="profile-image"><br>
+            <small class="blog-content">{{posts.author.first_name}}</small>
         </div>
         <h2 class="blog-title">{{posts.title}}</h2>
         <p class="blog-content">{{posts.content}}</p>
-         <small class="blog-content">{{posts.author.first_name}}</small><br>
 
         <button id="{{posts.id}}" onclick="checklike(this.id)">
             {% if posts.is_liked %}

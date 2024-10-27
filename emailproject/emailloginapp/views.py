@@ -187,7 +187,7 @@ def test(request,id):                      # like/dislike
         likebutton.save()
         return JsonResponse({'count': post.likes.count(),'status':likebutton.status})
 
-@role_required()
+@role_required()  # displaying permissions
 def permission(request):
     allpermissions = AllPermissionsList.objects.select_related()
     for p in allpermissions:
@@ -197,7 +197,7 @@ def permission(request):
     return render(request,'permission.html',{'permissions':allpermissions})
 
 
-@role_required()
+@role_required() #setting permissions
 def setpermission(request,id):
     fetchpermission = AllPermissionsList.objects.get(id=id)
     permission = UserPermissions.objects.filter(permissions=id)
