@@ -1,0 +1,42 @@
+{% extends "navbar.html"  %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    <title>Permission</title>
+</head>
+<script>
+function setpermission(id) {
+document.getElementById(id);
+$.get("http://127.0.0.1:8000/setpermission/"+id+"/", function(data, status)
+   {
+   alert(data.data)
+
+   });
+   }
+</script>
+<body>
+    <h1>SET USER PERMISSION</h1>
+<div>
+    <table>
+        <tr>
+            <th>Permission Names</th>
+            <th>ON/OFF</th>
+        </tr>
+        {% for permission in permissions %}
+        <tr>
+            <td>{{permission.permissionnames}}</td>
+            <td><label class="switch">
+ <input type="checkbox" id="{{permission.id}}" onchange="setpermission(this.id)" {% if permission.status %} checked {%endif%}>
+ <span class="slider round"></span>
+ </label></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>
+{% endblock %}

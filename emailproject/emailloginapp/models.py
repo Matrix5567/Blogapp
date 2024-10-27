@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     address = models.CharField(max_length=255)
     phone_number = models.IntegerField(null=True,unique=True)
     image = models.ImageField(upload_to='images/',null=True)
-    is_admin = models.BooleanField(default=False,null=True)
+    is_admin = models.BooleanField(default=False,null=True)  # role admin = True , normal user =False
     is_locked = models.BooleanField(default=False,null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username',)
@@ -41,6 +41,14 @@ class LikeButtonStatus(models.Model):
     person = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     blog = models.ForeignKey(Blog,on_delete=models.CASCADE)
     status = models.BooleanField(default=False,null = True)
+
+class AllPermissionsList(models.Model):
+    permissionnames = models.CharField(max_length=20)
+
+class UserPermissions(models.Model):
+    is_admin = models.BooleanField(null=True)  # role false for normal users
+    permissions = models.ForeignKey(AllPermissionsList,on_delete=models.CASCADE,null=True)
+    button_status = models.BooleanField(default=False,null=True)
 
 
 

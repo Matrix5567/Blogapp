@@ -6,7 +6,7 @@ from . forms import SignupForm , LoginForm ,UserEditForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .validators import validate_blog
-from.models import Blog , CustomUser , LikeButtonStatus
+from.models import Blog , CustomUser , LikeButtonStatus , AllPermissionsList , UserPermissions
 from django.contrib.sessions.models import Session
 from django.db.models import Q
 from .customdecorators import role_required
@@ -187,11 +187,26 @@ def test(request,id):                      # like/dislike
         likebutton.save()
         return JsonResponse({'count': post.likes.count(),'status':likebutton.status})
 
+@role_required()
+def permission(request):
+    allpermissions = AllPermissionsList.objects.select_related()
+    for p in allpermissions:
+        permission = UserPermissions.objects.filter(permissions=p)
+        for status in permission:
+            p.status=status.button_status
+    return render(request,'permission.html',{'permissions':allpermissions})
 
 
-
-
-
+@role_required()
+def setpermission(request,id):
+    fetchpermission = AllPermissionsList.objects.get(id=id)
+    permission = UserPermissions.objects.filter(permissions=id)
+    if not permission:
+        UserPermissions(is_admin=False, permissions=fetchpermission, button_status=True).save()
+        return JsonResponse({'data':'PERMISSION ADDED'})
+    else:
+        permission.delete()
+        return JsonResponse({'data': 'PERMISSION DELETED'})
 
 
 

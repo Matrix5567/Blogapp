@@ -16,5 +16,7 @@ urlpatterns = [
     path('ad/delete_user/<int:id>', views.del_user, name='del_user'),
     path('lock/<int:id>/',views.lock_user,name='lock_user'),
     path('test/<int:id>/',views.test,name='test'),
+    path('permission', views.permission, name='permission'),
+    path('setpermission/<int:id>/',views.setpermission,name='setpermission'),
 ]
 
