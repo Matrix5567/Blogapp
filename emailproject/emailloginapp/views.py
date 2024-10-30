@@ -9,12 +9,13 @@ from .validators import validate_blog
 from.models import Blog , CustomUser , LikeButtonStatus , AllPermissionsList , UserPermissions
 from django.contrib.sessions.models import Session
 from django.db.models import Q
-from .customdecorators import role_required
+from .customdecorators import role_required , permission_required
 
 
 
 # Create your views here.
 @login_required()      # all blog listing and search blogs
+@permission_required('see_all_blogs')
 def members(request):
     search = request.GET.get('search')
     if not search:
@@ -90,6 +91,7 @@ def user_logout(request):
 
 
 @login_required()
+@permission_required('create_blog')
 def create_blog(request):  # blog creation
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -103,13 +105,15 @@ def create_blog(request):  # blog creation
     return render(request, 'create.html')
 
 @login_required()
+@permission_required('see_my_blogs')
 def my_blog(request):  # blog by userid
     posts = Blog.objects.filter(author=request.user)
     return render(request, 'myblogs.html',{'posts':posts})
 
 
 
-@login_required
+@login_required()
+@permission_required('detele_blog')
 def delete_blog(request,id):  # delete blog
     try:
         blog = Blog.objects.get(id=id)
@@ -122,6 +126,7 @@ def delete_blog(request,id):  # delete blog
         return redirect('my')
 
 @login_required()
+@permission_required('edit_blog')
 def edit_blog(request,id):  # edit blog
     posts = Blog.objects.get(id=id)
     if request.method == 'POST':
@@ -133,6 +138,7 @@ def edit_blog(request,id):  # edit blog
 
 
 @login_required()  # edit userprofile
+@permission_required('edit_user_profile')
 def profile_edit(request):
     if request.method == 'POST':
         form = UserEditForm(request.POST, request.FILES, instance=request.user)
