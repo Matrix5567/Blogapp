@@ -16,7 +16,27 @@
 <h2 class="text-center mb-4">Edit Your Profile</h2>
 <form method="post" enctype="multipart/form-data">
  {% csrf_token %}
-{{ form.as_p }}
+    <label>Username</label>
+    {{form.username}}
+    <label>Password</label>
+    {{form.password1}}
+    <label>Confirm Password</label>
+    {{form.password2}}
+    <label>Email</label>
+    {{form.email}}
+    <label>Firstname</label>
+    {{form.first_name}}
+    <label>Lastname</label>
+    {{form.last_name}}
+    <label>Nickname</label>
+    {{form.nickname}}
+    <label>Address</label>
+    {{form.address}}
+    <label>Phonenumber</label>
+    {{form.phone_number}}
+    <label>Image</label>
+    {{form.image}}
+    {{form.errors}}
 <button type="submit" class="btn btn-primary">Apply Edit</button>
 </form>
 </div>
