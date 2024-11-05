@@ -7,16 +7,23 @@ from django.contrib.auth.hashers import make_password
 
 
 class SignupForm(UserCreationForm):
-    email = forms.EmailField()
-    first_name = forms.CharField(max_length=255)
-    last_name = forms.CharField(max_length=255)
-    nickname = forms.CharField(max_length=255)
-    address = forms.CharField(max_length=255)
-    phone_number = forms.IntegerField(validators=[validate_phone_number])
-    image = forms.ImageField(validators=[validate_image])
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
+    first_name = forms.CharField(max_length=255,widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                              'placeholder': 'First Name'}))
+    last_name = forms.CharField(max_length=255,widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                             'placeholder': 'Last Name'}))
+    nickname = forms.CharField(max_length=255,widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                            'placeholder': 'Nickname'}))
+    address = forms.CharField(max_length=255,widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                           'placeholder': 'Address'}))
+    phone_number = forms.CharField(validators=[validate_phone_number],
+                                   widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}))
+    image = forms.ImageField(validators=[validate_image],
+                             widget=forms.FileInput(attrs={'class': 'form-control'}))
     class Meta:
         model = CustomUser
         fields = ['username', 'password1', 'password2','email','first_name','last_name','nickname','address','phone_number','image']
+
 
 class LoginForm(forms.Form):
     email = forms.EmailField()

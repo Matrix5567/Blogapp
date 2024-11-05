@@ -1,8 +1,6 @@
-/* signup.css */
-
 /* Global Styles */
 
-- {
+* {
 box-sizing: border-box;
 margin: 0;
 padding: 0;
@@ -42,19 +40,20 @@ flex-direction: column;
 gap: 20px;
 }
 
-form label {
-font-size: 18px;
-margin-bottom: 10px;
-}
-
-form input, select {
+.form-control {
+width: 100%;
 padding: 10px;
+margin-bottom: 20px;
 border: 1px solid #ccc;
 border-radius: 10px;
-width: 100%;
 }
 
-form button[type="submit"] {
+.form-control:focus {
+border-color: #007bff;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-signup {
 padding: 10px;
 background-color: #007bff;
 color: #fff;
@@ -64,7 +63,7 @@ cursor: pointer;
 width: 100%;
 }
 
-form button[type="submit"]:hover {
+.btn-signup:hover {
 background-color: #0056b3;
 }
 
@@ -95,11 +94,5 @@ padding: 10px;
 }
 .signup-card h1 {
 font-size: 14px;
-}
-form input, select {
-padding: 5px;
-}
-form button[type="submit"] {
-padding: 5px;
 }
 }

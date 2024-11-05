@@ -13,10 +13,15 @@ ADMIN PANEL
 the registered users there is also a custom decorator for admin so that normal users cant access admin url. The admin
 can lock and unlock normal users (done by ajax).
 
+**********************ADMIN PASSWORD AND EMAIL IS IN THE SEEDER.PY FILE ************
+
 PERMISSIONS
 ***run the seeder permissionseeder.py*** to add permissions to the database
 Admin can on/off different permissions for users
 
+                ******************************************************************************
+**************** NOTE - YOU HAVE TO LOGIN TO THE ADMIN PANEL AND SET PERMISSION FOR USERS FIRST  **************
+                *******************************************************************************
 
 **how to run
 cd emailproject

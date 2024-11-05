@@ -8,8 +8,8 @@ from emailloginapp.models import CustomUser
 
 
 
-password = 'master1234master'
-email='master@gmail.com'
+password = 'master1234master'  # ADMIN PASSWORD FOR ADMIN LOGIN
+email='master@gmail.com'       # ADMIN EMAIL FOR  ADMIN LOGIN
 
 if not CustomUser.objects.filter(email=email):
     is_admin = CustomUser.objects.create_user(
