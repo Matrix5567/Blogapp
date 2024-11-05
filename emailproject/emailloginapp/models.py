@@ -42,6 +42,11 @@ class LikeButtonStatus(models.Model):
     blog = models.ForeignKey(Blog,on_delete=models.CASCADE)
     status = models.BooleanField(default=False,null = True)
 
+class Comments(models.Model):
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog,on_delete=models.CASCADE)
+    comments = models.CharField(max_length=255)
+
 class AllPermissionsList(models.Model):
     permissionnames = models.CharField(max_length=20)
 

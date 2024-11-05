@@ -26,9 +26,47 @@ $.get("http://127.0.0.1:8000/test/"+id+"/", function(data, status)
    });
    }
 
+function showCommentForm(postId) {
+const commentForm = document.getElementById(`comment-form-${postId}`);
+const commentList = document.getElementById(`comment-list-${postId}`);
+commentForm.style.display = commentForm.style.display === 'block' ? 'none' : 'block';
+commentList.style.display = commentList.style.display === 'block' ? 'none' : 'block';
+}
+function postcomment(postId) {
+const comments = document.getElementById(`comment-text-${postId}`).value;
+const csrf = '{{ csrf_token }}';
+if(comments==''){
+alert("comments cannnot be empty")
+}
+else {
+$.ajax({
+type:'POST',
+url:'http://127.0.0.1:8000/comments/',
+headers:{
+'X-CSRFToken':csrf
+},
+data:{
+'comments':comments,
+'blogid':postId,
+},
+success:function(data){
+const commentList = document.getElementById(`comment-list-${postId}`);
+commentList.innerHTML += `
+ <div class="comment">
+ <img src="${data.image}" class="profile-image">
+ <span>${data.name}</span>
+ <p>${data.comment}</p>
+ </div>
+ `;
+
+}
+});
+}
+}
+
 </script>
 <body>
-    <div class="home-container">
+    <div>
         <header>
             <h1>MY BLOGZZZ</h1>
             {% if not user.is_authenticated %}
@@ -49,7 +87,6 @@ $.get("http://127.0.0.1:8000/test/"+id+"/", function(data, status)
             <a href="{% url 'login' %}" class="btn-login">Login</a>
             <a href="{% url 'signup' %}" class="btn-signup">Signup</a>
         </nav>
-    </div>
     {% else %}
 {% for posts in posts %}
     <div class="blog-container" id="blog_{{posts.id}}">
@@ -68,12 +105,37 @@ $.get("http://127.0.0.1:8000/test/"+id+"/", function(data, status)
             <img src="{% static 'icons/thumbs-up-line-icon.svg'%}" alt="User Image" class="like" id="btnimage-{{posts.id}}">
             {% endif %}
             </button>
-
         <p id="count-{{posts.id}}">{{posts.like_count}}</p>
+        <!-- Comment Button -->
+        {% for permission in permission %}
+        {% if 'view_post_comments' in permission.permissions.permissionnames  %}
+        <button class="comment-btn" id="{{posts.id}}" onclick="showCommentForm(this.id)">Comments</button>
+        {%endif%}
+        {% endfor %}
+        <!-- Comment Form (hidden initially) -->
+<div class="comment-form" id="comment-form-{{posts.id}}" style="display: none;">
+<textarea id="comment-text-{{posts.id}}" placeholder="Write a comment..." required></textarea>
+<button id="{{posts.id}}" onclick="postcomment(this.id)">Post Comment
+</button>
+</div>
+   <!-- Comment List (hidden initially) -->
+
+        <div class="comment-list" id="comment-list-{{posts.id}}" style="display: none;">
+            {% for comm in posts.comments %}
+            <div class="comment">
+                <img src="{{ comm.comment_posted_user_image.url }}" class="profile-image">
+                <span>{{comm.comment_posted_user}}</span>
+                <p>{{comm.blog_comments}}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+</div>
+
     </div>
 {% endfor %}
  {% endif %}
-
+</div>
 </body>
 </html>
 {% endblock %}

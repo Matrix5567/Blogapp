@@ -6,7 +6,7 @@ from . forms import SignupForm , LoginForm ,UserEditForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .validators import validate_blog
-from.models import Blog , CustomUser , LikeButtonStatus , AllPermissionsList , UserPermissions
+from.models import Blog , CustomUser , LikeButtonStatus , AllPermissionsList , UserPermissions, Comments
 from django.contrib.sessions.models import Session
 from django.db.models import Q
 from .customdecorators import role_required , permission_required
@@ -22,15 +22,33 @@ def members(request):
         blogs = Blog.objects.annotate(like_count=Count('likes'))
         for blog in blogs:
             like_status = LikeButtonStatus.objects.filter(person=request.user,blog=blog)
+            comment = Comments.objects.filter(blog=blog)
+            blog.comments = []
+            for comments in comment:
+                comment_dict = {
+                    'blog_comments': comments.comments,
+                    'comment_posted_user':comments.user.first_name,
+                    'comment_posted_user_image':comments.user.image
+                }
+                blog.comments.append(comment_dict)
             for status in like_status:
                 blog.is_liked = status.status
-        return  render(request,'page1.html',{'posts':blogs})
+        return render(request,'page1.html',{'posts':blogs})
     else:
         request.session['previous_url'] = request.build_absolute_uri()
         results = Blog.objects.filter(Q(title__icontains=search)| Q(content__icontains=search) |
                                              Q(author__first_name__icontains=search))
         for result in results:
             like_status = LikeButtonStatus.objects.filter(person=request.user, blog=result)
+            comment = Comments.objects.filter(blog=result)
+            result.comments = []
+            for comments in comment:
+                comment_dict = {
+                    'blog_comments': comments.comments,
+                    'comment_posted_user': comments.user.first_name,
+                    'comment_posted_user_image': comments.user.image
+                }
+                result.comments.append(comment_dict)
             for status in like_status:
                 result.is_liked = status.status
         return render(request, 'page1.html', {'posts': results})
@@ -213,6 +231,17 @@ def setpermission(request,id):
     else:
         permission.delete()
         return JsonResponse({'data': 'PERMISSION DELETED'})
+
+
+@login_required()
+@permission_required('view_post_comments')
+def comments(request):  #post comment
+    blog_id = request.POST.get('blogid')
+    post = Blog.objects.get(id=blog_id)
+    comment = request.POST.get('comments')
+    Comments(blog=post,user=request.user,comments=comment).save()
+    return JsonResponse({'id':blog_id,'image':request.user.image.url,'comment':comment,'name':request.user.first_name})
+
 
 
 

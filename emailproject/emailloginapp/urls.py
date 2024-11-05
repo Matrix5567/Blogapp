@@ -18,5 +18,6 @@ urlpatterns = [
     path('test/<int:id>/',views.test,name='test'),
     path('permission', views.permission, name='permission'),
     path('setpermission/<int:id>/',views.setpermission,name='setpermission'),
+    path('comments/',views.comments,name='comments'),
 ]
 
