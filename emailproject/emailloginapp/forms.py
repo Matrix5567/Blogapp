@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-
 from .models import CustomUser
 from .validators import validate_phone_number , validate_image
 from django.contrib.auth.hashers import make_password
+
+
 
 
 class SignupForm(UserCreationForm):

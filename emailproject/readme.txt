@@ -22,6 +22,7 @@ Admin can on/off different permissions for users
                 ******************************************************************************
 **************** NOTE - YOU HAVE TO LOGIN TO THE ADMIN PANEL AND SET PERMISSION FOR USERS FIRST  **************
                 *******************************************************************************
+New features will roll out soon...
 
 **how to run
 cd emailproject

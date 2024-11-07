@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'emailloginapp'
+    'emailloginapp',
 ]
 
 
@@ -57,6 +57,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'emailproject.urls'
+
+
 
 TEMPLATES = [
     {

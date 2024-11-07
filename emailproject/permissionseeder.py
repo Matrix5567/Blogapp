@@ -8,5 +8,8 @@ from emailloginapp.models import AllPermissionsList
 
 names = ['create_blog','detele_blog','edit_blog','see_my_blogs','see_all_blogs','edit_user_profile','view_post_comments']
 
+permissions = AllPermissionsList.objects.all()
 for name in names:
-    AllPermissionsList.objects.create(permissionnames=name).save()
+    if not AllPermissionsList.objects.filter(permissionnames = name).exists():
+        AllPermissionsList.objects.create(permissionnames=name)
+print("PERMISSIONS CREATED")
