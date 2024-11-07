@@ -16,7 +16,8 @@
         </header>
         <main>
             <section class="user-profile">
-                <img src="{{ request.user.image.url }}" alt="User Image" class="profile-image">
+                <img src="{% if request.user.image %} {{ request.user.image.url }}
+                    {% else %} {% static 'icons/default_user_image.jpeg'%} {% endif %}" alt="User Image" class="profile-image">
                 <h2>{{ request.user.username }}</h2>
                 <p>Firstname: {{ request.user.first_name }}</p>
                 <p>Lastname: {{ request.user.last_name }}</p>

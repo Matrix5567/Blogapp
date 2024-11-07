@@ -88,6 +88,7 @@ commentList.innerHTML += `
             <a href="{% url 'signup' %}" class="btn-signup">Signup</a>
         </nav>
     {% else %}
+{% if posts %}
 {% for posts in posts %}
     <div class="blog-container" id="blog_{{posts.id}}">
         <div class="image-container">
@@ -134,7 +135,11 @@ commentList.innerHTML += `
 
     </div>
 {% endfor %}
+    {% else %}
+    <p><center><b>No Posts</b></center></p>
  {% endif %}
+    {% endif %}
+
 </div>
 </body>
 </html>
