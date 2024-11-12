@@ -56,7 +56,22 @@ class UserPermissions(models.Model):
     button_status = models.BooleanField(default=False,null=True)
 
 
+class Notifications(models.Model):
+    NOTIFICATION_TYPES = (
+        ('like','Like'),
+        ('comment','Comment')
+    )
 
+    sender = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='sent_notifications')
+    receiver = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='received_notifications')
+    notification_type = models.CharField(max_length=10,choices=NOTIFICATION_TYPES)
+    post = models.ForeignKey(Blog,on_delete=models.CASCADE,null=True)
+    comment = models.ForeignKey(Comments,on_delete=models.CASCADE,null=True)
+    read = models.BooleanField(default=False)
+
+    def mark_as_read(self):
+        self.read = True
+        self.save()
 
 
 

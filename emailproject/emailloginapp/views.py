@@ -6,7 +6,8 @@ from . forms import SignupForm , LoginForm ,UserEditForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .validators import validate_blog
-from.models import Blog , CustomUser , LikeButtonStatus , AllPermissionsList , UserPermissions, Comments
+from.models import Blog , CustomUser , LikeButtonStatus , AllPermissionsList , UserPermissions, Comments \
+    , Notifications
 from django.contrib.sessions.models import Session
 from django.db.models import Q
 from .customdecorators import role_required , permission_required
@@ -14,6 +15,16 @@ from .customdecorators import role_required , permission_required
 
 
 # Create your views here.
+# @login_required()  # saving notifications
+# def save_notification(feature,sender,receiver,post):
+#     if feature == 'like_noti':
+#         notification = Notifications(sender=sender,receiver=receiver,post=post,notification_type='Like')
+#         notification.save()
+#     else:
+#         notification = Notifications(sender=sender, receiver=receiver, post=post, notification_type='Comment')
+#         notification.save()
+
+
 @login_required()      # all blog listing and search blogs
 @permission_required('see_all_blogs')
 def members(request):
@@ -207,8 +218,11 @@ def test(request,id):                      # like/dislike
         return JsonResponse({'count': post.likes.count(),'status':likebutton.status})
     else:
         post.likes.add(request.user)
+        #save_notification('like_noti',request.user,post.author,post)  # calling to save like notification
         likebutton = LikeButtonStatus(person=request.user, blog=post, status=True)
         likebutton.save()
+        notification = Notifications(sender=request.user, receiver=post.author, post=post, notification_type='like')
+        notification.save()
         return JsonResponse({'count': post.likes.count(),'status':likebutton.status})
 
 @role_required()  # displaying permissions
@@ -239,9 +253,35 @@ def comments(request):  #post comment
     blog_id = request.POST.get('blogid')
     post = Blog.objects.get(id=blog_id)
     comment = request.POST.get('comments')
-    Comments(blog=post,user=request.user,comments=comment).save()
+    this_comment=Comments(blog=post,user=request.user,comments=comment)
+    this_comment.save()
+    #save_notification('comment_noti',request.user,post.author,this_comment) # calling to save comment notification
+    notification = Notifications(sender=request.user, receiver=post.author, post=post, notification_type='comment')
+    notification.save()
     return JsonResponse({'id':blog_id,'image':request.user.image.url,'comment':comment,'name':request.user.first_name})
 
-
-
+@login_required()
+def fetch_notification(request):
+    message = []
+    notification = Notifications.objects.filter(receiver=request.user)
+    if not notification:
+        msg = "NO NOTIFICATIONS"
+        dict = {
+            'data': msg
+        }
+        message.append(dict)
+    for noti in notification:
+        if noti.notification_type == 'like':
+            msg = f"{noti.sender.first_name+noti.sender.last_name} has liked your post '{noti.post.title}'"
+            dict={
+                'data':msg
+            }
+            message.append(dict)
+        else:
+            msg = f"{noti.sender.first_name + noti.sender.last_name} has commented on your post '{noti.post.title}'"
+            dict = {
+                'data': msg
+            }
+            message.append(dict)
+    return JsonResponse({"data": message})
 

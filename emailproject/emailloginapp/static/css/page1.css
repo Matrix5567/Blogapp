@@ -178,6 +178,27 @@ nav a:hover {
   margin-right: 10px;
 }
 
+.hover-trigger {
+position : relative;
+}
+.popup-box {
+display:none;
+position:absolute;
+top:0;
+left:20%;
+transform:translateX(-50);
+background-color:#fff;
+border:1px solid #ddd;
+padding:10px;
+border-radius:5px;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
+z-index:1;
+}
+
+.hover-trigger:hover .popup-box {
+display:block;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   .home-container {

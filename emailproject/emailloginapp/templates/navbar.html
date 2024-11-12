@@ -2,43 +2,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <script>
+    window.onload = function() {
+      $.get("http://127.0.0.1:8000/fetchnotification", function(data, status) {
+        console.log(">>>???", data.data)
+        const notificationList = document.getElementById('notification-list');
+        data.data.forEach(notification => {
+          const notificationHTML = `
+          <ul>
+            <li>
+              <a href="#">${notification.data}</a>
+            </li>
+            </ul>
+          `;
+          notificationList.innerHTML += notificationHTML;
+        });
+      });
+    }
+  </script>
 </head>
+
 <body>
-{% if not request.user.is_admin %}
-<ul>
-<li><a class="active" href="{% url 'success' %}">Home</a></li>
-    {% for permission in permission %}
-    {% if 'create_blog' in permission.permissions.permissionnames  %}
-<li><a href="{% url 'create' %}">Create Blog</a> </li>
-    {%endif%}
-{% endfor %}
-    {% for permission in permission %}
-    {% if 'see_my_blogs' in permission.permissions.permissionnames  %}
-    <li><a href="{% url 'my' %}">My Blogs</a> </li>
-     {%endif%}
-{% endfor %}
-     {% for permission in permission %}
-    {% if 'see_all_blogs' in permission.permissions.permissionnames  %}
-<li> <a href="{% url 'members' %}">All Blogs</a></li>
-     {%endif%}
-{% endfor %}
-    {% for permission in permission %}
-    {% if 'edit_user_profile' in permission.permissions.permissionnames  %}
-    <li> <a href="{% url 'profile_edit' %}">Edit Profile</a></li>
-         {%endif%}
-{% endfor %}
-<li><a href="{% url 'logout' %}">Logout</a></li>
-</ul>
-{%else%}
-<ul>
-    <li><a href="{% url 'ad_min' %}" class="active">ADMIN PANEL</a></li>
-    <li><a href="{% url 'permission' %}">PERMISSIONS</a></li>
-    <li><a href="{% url 'logout' %}">Logout</a></li>
-</ul>
-{%endif%}
+  {% if not request.user.is_admin %}
+    <ul>
+      <li><a class="active" href="{% url 'success' %}">Home</a></li>
+
+      {% for permission in permission %}
+        {% if 'create_blog' in permission.permissions.permissionnames %}
+          <li><a href="{% url 'create' %}">Create Blog</a> </li>
+        {% endif %}
+      {% endfor %}
+
+      {% for permission in permission %}
+        {% if 'see_my_blogs' in permission.permissions.permissionnames %}
+          <li><a href="{% url 'my' %}">My Blogs</a> </li>
+        {% endif %}
+      {% endfor %}
+
+      {% for permission in permission %}
+        {% if 'see_all_blogs' in permission.permissions.permissionnames %}
+          <li> <a href="{% url 'members' %}">All Blogs</a></li>
+        {% endif %}
+      {% endfor %}
+
+      {% for permission in permission %}
+        {% if 'edit_user_profile' in permission.permissions.permissionnames %}
+          <li> <a href="{% url 'profile_edit' %}">Edit Profile</a></li>
+        {% endif %}
+      {% endfor %}
+
+      <!-- Notifications with dropdown -->
+      <li id="notification-dropdown">
+        <a href="#" class="notification-link">Notifications</a>
+      </li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="notification-content">
+    <ul id="notification-list">
+      <!-- Notifications will be listed here -->
+    </ul>
+  </div>
+
+  {% else %}
+    <ul>
+      <li><a href="{% url 'ad_min' %}" class="active">ADMIN PANEL</a></li>
+      <li><a href="{% url 'permission' %}">PERMISSIONS</a></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  {% endif %}
+
+  <script>
+    const notificationLink = document.querySelector('.notification-link');
+    const notificationContent = document.querySelector('.notification-content');
+
+    notificationLink.addEventListener('mouseover', () => {
+      notificationContent.style.display = 'block';
+    });
+
+    notificationLink.addEventListener('mouseout', () => {
+      notificationContent.style.display = 'none';
+    });
+  </script>
 </body>
 </html>
-{% block content %}
-{% endblock %}
+
+{% block content %} {% endblock %}

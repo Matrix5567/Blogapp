@@ -36,7 +36,7 @@ function postcomment(postId) {
 const comments = document.getElementById(`comment-text-${postId}`).value;
 const csrf = '{{ csrf_token }}';
 if(comments==''){
-alert("comments cannnot be empty")
+alert("comments cannot be empty")
 }
 else {
 $.ajax({
@@ -63,7 +63,6 @@ commentList.innerHTML += `
 });
 }
 }
-
 </script>
 <body>
     <div>
@@ -107,6 +106,7 @@ commentList.innerHTML += `
             {% endif %}
             </button>
         <p id="count-{{posts.id}}">{{posts.like_count}}</p>
+
         <!-- Comment Button -->
         {% for permission in permission %}
         {% if 'view_post_comments' in permission.permissions.permissionnames  %}

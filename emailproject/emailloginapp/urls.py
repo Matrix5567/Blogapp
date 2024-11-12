@@ -19,5 +19,6 @@ urlpatterns = [
     path('permission', views.permission, name='permission'),
     path('setpermission/<int:id>/',views.setpermission,name='setpermission'),
     path('comments/',views.comments,name='comments'),
+    path('fetchnotification/',views.fetch_notification,name='fetch_notification'),
 ]
 
