@@ -13,18 +13,6 @@ from django.db.models import Q
 from .customdecorators import role_required , permission_required
 
 
-
-# Create your views here.
-# @login_required()  # saving notifications
-# def save_notification(feature,sender,receiver,post):
-#     if feature == 'like_noti':
-#         notification = Notifications(sender=sender,receiver=receiver,post=post,notification_type='Like')
-#         notification.save()
-#     else:
-#         notification = Notifications(sender=sender, receiver=receiver, post=post, notification_type='Comment')
-#         notification.save()
-
-
 @login_required()      # all blog listing and search blogs
 @permission_required('see_all_blogs')
 def members(request):
@@ -218,7 +206,6 @@ def test(request,id):                      # like/dislike
         return JsonResponse({'count': post.likes.count(),'status':likebutton.status})
     else:
         post.likes.add(request.user)
-        #save_notification('like_noti',request.user,post.author,post)  # calling to save like notification
         likebutton = LikeButtonStatus(person=request.user, blog=post, status=True)
         likebutton.save()
         notification = Notifications(sender=request.user, receiver=post.author, post=post, notification_type='like')
@@ -255,7 +242,6 @@ def comments(request):  #post comment
     comment = request.POST.get('comments')
     this_comment=Comments(blog=post,user=request.user,comments=comment)
     this_comment.save()
-    #save_notification('comment_noti',request.user,post.author,this_comment) # calling to save comment notification
     notification = Notifications(sender=request.user, receiver=post.author, post=post, notification_type='comment')
     notification.save()
     return JsonResponse({'id':blog_id,'image':request.user.image.url,'comment':comment,'name':request.user.first_name})

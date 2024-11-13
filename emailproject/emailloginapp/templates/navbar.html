@@ -6,22 +6,31 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
   <script>
-    window.onload = function() {
-      $.get("http://127.0.0.1:8000/fetchnotification", function(data, status) {
-        console.log(">>>???", data.data)
-        const notificationList = document.getElementById('notification-list');
-        data.data.forEach(notification => {
-          const notificationHTML = `
+window.onload = function() {
+  // Initial notification fetch
+  fetchNotifications();
+
+  // Set interval for periodic updates
+  setInterval(fetchNotifications, 15000); // 15 seconds
+
+  function fetchNotifications() {
+    $.get("http://127.0.0.1:8000/fetchnotification", function(data, status) {
+      const notificationList = document.getElementById('notification-list');
+      notificationList.innerHTML = ''; // Clear previous notifications
+
+      data.data.forEach(notification => {
+        const notificationHTML = `
           <ul>
             <li>
               <a href="#">${notification.data}</a>
             </li>
-            </ul>
-          `;
-          notificationList.innerHTML += notificationHTML;
-        });
+          </ul>
+        `;
+        notificationList.innerHTML += notificationHTML;
       });
-    }
+    });
+  }
+}
   </script>
 </head>
 

@@ -19,6 +19,9 @@ PERMISSIONS
 ***run the seeder permissionseeder.py*** to add permissions to the database
 Admin can on/off different permissions for users
 
+NOTIFICATIONS
+Users will get real time notifications about like and comment
+
                 ******************************************************************************
 **************** NOTE - YOU HAVE TO LOGIN TO THE ADMIN PANEL AND SET PERMISSION FOR USERS FIRST  **************
                 *******************************************************************************
