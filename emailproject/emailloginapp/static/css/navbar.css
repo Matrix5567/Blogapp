@@ -71,3 +71,13 @@ li a:hover:not(.active) {
 #notification-list li:last-child {
   border-bottom: none;
 }
+#notification-dot {
+  background-color: red;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  position:absolute;
+  top:15px;
+  right:-5px;
+}

@@ -7,6 +7,7 @@
 
   <script>
 window.onload = function() {
+
   // Initial notification fetch
   fetchNotifications();
 
@@ -17,7 +18,13 @@ window.onload = function() {
     $.get("http://127.0.0.1:8000/fetchnotification", function(data, status) {
       const notificationList = document.getElementById('notification-list');
       notificationList.innerHTML = ''; // Clear previous notifications
-
+      const notificationDot = document.getElementById('notification-dot');
+      const hasUnreadNotifications = data.data.some(notification => !notification.readstatus);
+    if (hasUnreadNotifications) {
+      notificationDot.style.display = 'inline-block';
+    } else {
+      notificationDot.style.display = 'none';
+    }
       data.data.forEach(notification => {
         const notificationHTML = `
           <ul>
@@ -30,6 +37,24 @@ window.onload = function() {
       });
     });
   }
+  // Mark notifications as read when dropdown is opened
+const notificationLink = document.querySelector('.notification-link');
+const notificationContent = document.querySelector('.notification-content');
+notificationLink.addEventListener('mouseover', () => {
+  const csrf = '{{ csrf_token }}';
+  notificationContent.style.display = 'block';
+  // Send AJAX request to mark notifications as read
+  $.ajax({
+    type: 'POST',
+    url: 'http://127.0.0.1:8000/mark-notification-read/',
+    headers:{
+    'X-CSRFToken':csrf
+},
+    success: function(data) {
+      document.getElementById('notification-dot').style.display = 'none';
+    }
+  });
+});
 }
   </script>
 </head>
@@ -66,6 +91,7 @@ window.onload = function() {
       <!-- Notifications with dropdown -->
       <li id="notification-dropdown">
         <a href="#" class="notification-link">Notifications</a>
+         <span id="notification-dot" style="display: none;"></span>
       </li>
       <li><a href="{% url 'logout' %}">Logout</a></li>
     </ul>

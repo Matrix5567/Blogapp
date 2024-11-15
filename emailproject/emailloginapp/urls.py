@@ -20,5 +20,6 @@ urlpatterns = [
     path('setpermission/<int:id>/',views.setpermission,name='setpermission'),
     path('comments/',views.comments,name='comments'),
     path('fetchnotification/',views.fetch_notification,name='fetch_notification'),
+    path('mark-notification-read/',views.mark_notification,name="mark_notification"),
 ]
 

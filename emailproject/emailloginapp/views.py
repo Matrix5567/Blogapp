@@ -247,7 +247,7 @@ def comments(request):  #post comment
     return JsonResponse({'id':blog_id,'image':request.user.image.url,'comment':comment,'name':request.user.first_name})
 
 @login_required()
-def fetch_notification(request):
+def fetch_notification(request):    # showing notifications
     message = []
     notification = Notifications.objects.filter(receiver=request.user)
     if not notification:
@@ -258,16 +258,22 @@ def fetch_notification(request):
         message.append(dict)
     for noti in notification:
         if noti.notification_type == 'like':
-            msg = f"{noti.sender.first_name+noti.sender.last_name} has liked your post '{noti.post.title}'"
+            msg = f"{noti.sender.first_name + noti.sender.last_name} has liked your post '{noti.post.title}'"
             dict={
-                'data':msg
+                'data':msg,
+                'readstatus':noti.read,
             }
             message.append(dict)
         else:
             msg = f"{noti.sender.first_name + noti.sender.last_name} has commented on your post '{noti.post.title}'"
             dict = {
-                'data': msg
+                'data': msg,
+                'readstatus': noti.read,
             }
             message.append(dict)
     return JsonResponse({"data": message})
 
+@login_required()   # marking read in notification
+def mark_notification(request):
+    Notifications.objects.filter(receiver=request.user).update(read=True)
+    return JsonResponse({'success': True})
