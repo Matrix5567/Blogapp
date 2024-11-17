@@ -9,20 +9,24 @@
     <title>Login</title>
 </head>
 <body>
-    <div class="container">
+    <div class="login-wrapper">
         <div class="login-card">
-            <h1>Login</h1>
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn-login">Login</button>
-                <a href="{% url 'signup' %}" class="create-account">Don't have an account? Create</a>
-                <div class="messages">
-                    {% for message in messages %}
-                    <div class="message">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            </form>
+            <div class="card-header">
+                <h1>Login</h1>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn-login">Login</button>
+                    <a href="{% url 'signup' %}" class="create-account">Don't have an account? Create</a>
+                    <div class="messages">
+                        {% for message in messages %}
+                            <div class="message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </body>

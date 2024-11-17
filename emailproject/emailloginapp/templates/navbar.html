@@ -62,7 +62,7 @@ notificationLink.addEventListener('mouseover', () => {
 <body>
   {% if not request.user.is_admin %}
     <ul>
-      <li><a class="active" href="{% url 'success' %}">Home</a></li>
+      <li><a class="active" href="{% url 'success' %}">DASHBOARD</a></li>
 
       {% for permission in permission %}
         {% if 'create_blog' in permission.permissions.permissionnames %}
