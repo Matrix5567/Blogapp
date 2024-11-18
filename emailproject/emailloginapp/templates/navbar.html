@@ -19,7 +19,7 @@ window.onload = function() {
       const notificationList = document.getElementById('notification-list');
       notificationList.innerHTML = ''; // Clear previous notifications
       const notificationDot = document.getElementById('notification-dot');
-      const hasUnreadNotifications = data.data.some(notification => !notification.readstatus);
+      const hasUnreadNotifications = data.data.some(notification => notification.readstatus===false);
     if (hasUnreadNotifications) {
       notificationDot.style.display = 'inline-block';
     } else {
