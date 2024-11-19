@@ -81,3 +81,10 @@ li a:hover:not(.active) {
   top:15px;
   right:-5px;
 }
+.navbar_email {
+display: inline-block;
+position:absolute;
+color:white;
+top:15px;
+right:-585px;
+}

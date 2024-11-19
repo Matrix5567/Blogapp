@@ -94,9 +94,9 @@ notificationLink.addEventListener('mouseover', () => {
          <span id="notification-dot" style="display: none;"></span>
       </li>
       <li><a href="{% url 'logout' %}">Logout</a></li>
+      <li><p class="navbar_email">{{ request.user.email }}</p></li>
     </ul>
   </div>
-
   <div class="notification-content">
     <ul id="notification-list">
       <!-- Notifications will be listed here -->
