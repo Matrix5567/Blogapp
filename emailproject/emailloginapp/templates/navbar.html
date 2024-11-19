@@ -7,12 +7,18 @@
 
   <script>
 window.onload = function() {
+  fetchusertype();
 
-  // Initial notification fetch
-  fetchNotifications();
-
-  // Set interval for periodic updates
-  setInterval(fetchNotifications, 15000); // 15 seconds
+  function fetchusertype(){
+    $.get("http://127.0.0.1:8000/login-check-user", function(data, status) {
+    if(data.data===false){
+     // Initial notification fetch
+      fetchNotifications();
+       // Set interval for periodic updates
+      setInterval(fetchNotifications, 15000); // 15 seconds
+    }
+  });
+  }
 
   function fetchNotifications() {
     $.get("http://127.0.0.1:8000/fetchnotification", function(data, status) {
@@ -37,9 +43,13 @@ window.onload = function() {
       });
     });
   }
+
+
   // Mark notifications as read when dropdown is opened
 const notificationLink = document.querySelector('.notification-link');
 const notificationContent = document.querySelector('.notification-content');
+
+if (notificationLink!==null){
 notificationLink.addEventListener('mouseover', () => {
   const csrf = '{{ csrf_token }}';
   notificationContent.style.display = 'block';
@@ -55,6 +65,7 @@ notificationLink.addEventListener('mouseover', () => {
     }
   });
 });
+}
 }
   </script>
 </head>

@@ -273,7 +273,15 @@ def fetch_notification(request):    # showing notifications
             message.append(dict)
     return JsonResponse({"data": message})
 
-@login_required()   # marking read in notification
+@login_required()   # marking read in notification for normal users
 def mark_notification(request):
     Notifications.objects.filter(receiver=request.user).update(read=True)
     return JsonResponse({'success': True})
+
+
+def login_check_user(request): # onload checking if admin or normal user to prevent unwanted ajax call
+    if request.user.is_admin:
+        return JsonResponse({"data":True})
+    else:
+        return JsonResponse({"data": False})
+
