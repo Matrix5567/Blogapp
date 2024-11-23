@@ -26,7 +26,7 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 67px;
 }
 
 header h1 {
@@ -198,6 +198,8 @@ z-index:1;
 .hover-trigger:hover .popup-box {
 display:block;
 }
+
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {
