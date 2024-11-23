@@ -73,29 +73,29 @@ notificationLink.addEventListener('mouseover', () => {
 <body>
   {% if not request.user.is_admin %}
     <ul>
-      <li><a class="active" href="{% url 'success' %}">DASHBOARD</a></li>
+      <li><a class="{% if request.path == '/success/'%} active {% endif %}" href="{% url 'success' %}">DASHBOARD</a></li>
 
       {% for permission in permission %}
         {% if 'create_blog' in permission.permissions.permissionnames %}
-          <li><a href="{% url 'create' %}">Create Blog</a> </li>
+          <li><a class="{% if request.path == '/createblog/'%} active {% endif %}" href="{% url 'create' %}">Create Blog</a> </li>
         {% endif %}
       {% endfor %}
 
       {% for permission in permission %}
         {% if 'see_my_blogs' in permission.permissions.permissionnames %}
-          <li><a href="{% url 'my' %}">My Blogs</a> </li>
+          <li><a class="{% if request.path == '/myblog/'%} active {% endif %}" href="{% url 'my' %}">My Blogs</a> </li>
         {% endif %}
       {% endfor %}
 
       {% for permission in permission %}
         {% if 'see_all_blogs' in permission.permissions.permissionnames %}
-          <li> <a href="{% url 'members' %}">All Blogs</a></li>
+          <li> <a class="{% if request.path == '/members/'%} active {% endif %}" href="{% url 'members' %}">All Blogs</a></li>
         {% endif %}
       {% endfor %}
 
       {% for permission in permission %}
         {% if 'edit_user_profile' in permission.permissions.permissionnames %}
-          <li> <a href="{% url 'profile_edit' %}">Edit Profile</a></li>
+          <li> <a class="{% if request.path == '/profile/'%} active {% endif %}" href="{% url 'profile_edit' %}">Edit Profile</a></li>
         {% endif %}
       {% endfor %}
 
