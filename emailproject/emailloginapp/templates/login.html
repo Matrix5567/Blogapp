@@ -20,6 +20,7 @@
                     {{ form.as_p }}
                     <button type="submit" class="btn-login">Login</button>
                     <a href="{% url 'signup' %}" class="create-account">Don't have an account? Create</a>
+                    <a href="{% url 'forgot' %}" class="create-account">Forgot Password?</a>
                     <div class="messages">
                         {% for message in messages %}
                             <div class="message">{{ message }}</div>

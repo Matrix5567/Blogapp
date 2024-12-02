@@ -7,10 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .validators import validate_blog
 from.models import Blog , CustomUser , LikeButtonStatus , AllPermissionsList , UserPermissions, Comments \
-    , Notifications
+    , Notifications , Forgotpassword
 from django.contrib.sessions.models import Session
 from django.db.models import Q
 from .customdecorators import role_required , permission_required
+from .email import send_mail_page
+from .otpgeneration import otp
 
 
 @login_required()      # all blog listing and search blogs
@@ -284,4 +286,32 @@ def login_check_user(request): # onload checking if admin or normal user to prev
         return JsonResponse({"data":True})
     else:
         return JsonResponse({"data": False})
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            try:
+                send_mail_page(email=email)                            # function call to send email
+            finally:
+                return JsonResponse({'data':True})
+        else:
+            return JsonResponse({'message': "EMAIL NOT REGISTERED IN THE APP"})
+    return render(request,'forgotpassword.html')
+
+def forgot_login(request):  #forgot password login
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        try:
+            get_user = Forgotpassword.objects.get(otp=otp)
+            if otp == get_user.otp:
+                login(request, get_user.user)
+                get_user.delete()
+                return redirect('success')
+            else:
+                messages.error(request, 'INVALID OTP')
+                return render(request, 'forgotpassword.html')
+        except:
+            messages.error(request, 'INVALID OTP')
+            return render(request, 'forgotpassword.html')
 
