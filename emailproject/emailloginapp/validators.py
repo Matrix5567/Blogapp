@@ -1,3 +1,5 @@
+import smtplib
+
 from django.core.exceptions import ValidationError
 from . models import CustomUser
 
@@ -6,6 +8,7 @@ from . models import CustomUser
 def validate_phone_number(phone):
    if len(str(phone)) <10 or len(str(phone))>12:
        raise ValidationError('phone number must be 10 digits or 12 digits')
+
 
 
 def validate_blog(title,content):

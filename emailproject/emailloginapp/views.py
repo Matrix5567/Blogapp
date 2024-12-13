@@ -11,7 +11,7 @@ from.models import Blog , CustomUser , LikeButtonStatus , AllPermissionsList , U
 from django.contrib.sessions.models import Session
 from django.db.models import Q
 from .customdecorators import role_required , permission_required
-from .email import send_mail_page , check_internet_connection
+from .email import send_mail_page , check_internet_connection ,locked_or_not
 from .otpgeneration import otp
 
 
@@ -86,8 +86,7 @@ def user_login(request):
                     request.session.save()
                     return redirect('ad_min')
                 else:
-                    locked = CustomUser.objects.get(email=email)
-                    if locked.is_locked:
+                    if locked_or_not(email):
                         messages.error(request, 'THIS ACCOUNT IS LOCKED BY ADMIN...')
                     else:
                         login(request, user)
@@ -292,10 +291,13 @@ def forgot_password(request):
         email = request.POST.get('email')
         if CustomUser.objects.filter(email=email).exists():
             if check_internet_connection():
-                try:
-                    send_mail_page(email=email)                            # function call to send email
-                finally:
-                    return JsonResponse({'data': True})
+                if not locked_or_not(email):
+                    try:
+                        send_mail_page(email=email)                            # function call to send email
+                    finally:
+                        return JsonResponse({'data': True})
+                else:
+                    return JsonResponse({'message': "USER LOCKED BY ADMIN"})
             else:
                 return JsonResponse({'message': "CHECK YOUR INTERNET CONNECTION"})
         else:
@@ -310,7 +312,7 @@ def forgot_login(request):  #forgot password login
             if otp == get_user.otp:
                 login(request, get_user.user)
                 get_user.delete()
-                return redirect('success')
+                return redirect('profile_edit')
             else:
                 messages.error(request, 'INVALID OTP')
                 return render(request, 'forgotpassword.html')
