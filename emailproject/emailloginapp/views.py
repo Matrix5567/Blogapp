@@ -190,11 +190,11 @@ def lock_user(request,id):     # user locking by admin
     if user.is_locked:
         user.is_locked = False
         user.save()
-        return HttpResponse('User UnLocked')
+        return HttpResponse(f"{user.first_name} unlocked")
     else:
         user.is_locked = True
         user.save()
-        return HttpResponse('User Locked')
+        return HttpResponse(f"{user.first_name} locked")
 
 
 @login_required()
